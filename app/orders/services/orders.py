@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from app.orders.schemas import OrderCreateSchema
-from database.models import Order, Product, OrderItem
+from app.orders.schemas import OrderCreateSchema, OrderListSchema
+from database.models import Order, Product, OrderItem, Status
 
 
 def create_new_order(order: OrderCreateSchema, session: Session) -> Order:
@@ -48,3 +48,21 @@ def add_items_in_order(items: list, order: Order, session: Session) -> None:
         session.add(item)
     session.commit()
     session.refresh(order)
+
+def get_orders_list(session: Session) -> list[Order]:
+    orders = session.query(Order).all()
+    return orders
+
+def get_order(order_id: int, session: Session) -> Order:
+    order = session.query(Order).filter(Order.id == order_id).first()
+    if order is None:
+        raise HTTPException(status_code=404, detail="Invalid order id")
+    return order
+
+def update_status(order: Order, status_id: int, session: Session) -> Order:
+    status = session.query(Status).filter(Status.id == status_id).first()
+    if status is None:
+        raise HTTPException(status_code=404, detail="Invalid status")
+    order.status = status
+    session.commit()
+    return order
