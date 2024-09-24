@@ -35,9 +35,9 @@ class Order(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(UTC))
 
     status_id: Mapped[int] = mapped_column(ForeignKey("statuses.id"), default=1)
-    status: Mapped["Status"] = relationship(back_populates="orders")
+    status: Mapped["Status"] = relationship(back_populates="orders", lazy="joined")
 
-    order_items: Mapped["OrderItem"] = relationship(back_populates="order")
+    order_items: Mapped[list["OrderItem"]] = relationship(back_populates="order", lazy="joined")
 
 
 class OrderItem(Base):
