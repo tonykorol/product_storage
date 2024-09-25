@@ -11,9 +11,7 @@ router = APIRouter(prefix="/products", tags=["Products"])
 
 @router.post("", response_model=ProductShowSchema)
 def create_product(product: ProductCreateSchema, session: Session = Depends(get_session)):
-    """
-    Create new product.
-    """
+    """Create new product."""
     try:
         return create_new_product(product, session)
     except IntegrityError:

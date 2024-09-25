@@ -33,6 +33,7 @@ class Order(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(UTC))
+    price: Mapped[float] = mapped_column(Float, nullable=True)
 
     status_id: Mapped[int] = mapped_column(ForeignKey("statuses.id"), default=1)
     status: Mapped["Status"] = relationship(back_populates="orders", lazy="joined")
@@ -45,6 +46,7 @@ class OrderItem(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     product_quantity: Mapped[int] = mapped_column(Integer)
+    price: Mapped[float] = mapped_column(Float, nullable=True)
 
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
     product: Mapped["Product"] = relationship(back_populates="order_items")

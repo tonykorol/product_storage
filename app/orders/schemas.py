@@ -7,18 +7,22 @@ class StatusSchema(BaseModel):
     id: int
     name: str
 
-
-class OrderItemSchema(BaseModel):
+class OrderItemCreateSchema(BaseModel):
     product_id: int
     product_quantity: int
 
-class OrderCreateSchema(BaseModel):
-    order_items: list[OrderItemSchema]
+class OrderItemShowSchema(OrderItemCreateSchema):
+    price: float
 
-class OrderSchema(OrderCreateSchema):
+class OrderCreateSchema(BaseModel):
+    order_items: list[OrderItemCreateSchema]
+
+class OrderSchema(BaseModel):
     id: int
     created_at: datetime
     status: StatusSchema
+    price: float
+    order_items: list[OrderItemShowSchema]
 
 class OrderListSchema(BaseModel):
     orders: list[OrderSchema]
