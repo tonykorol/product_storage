@@ -46,5 +46,8 @@ def delete_product(
 ):
     """Delete product."""
     product = get_product_by_id(product_id, session)
-    delete_product_by_id(product, session)
+    try:
+        delete_product_by_id(product, session)
+    except IntegrityError:
+        raise HTTPException(status_code=405, detail="Product is on order")
     return {"message": f"Product {product_id} successfully deleted."}
